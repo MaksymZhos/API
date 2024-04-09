@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <title>{{title}}</title>
+</head>
+<body>
+    <header class="top_part">
+        <h1 style="align-self: flex-start">All Orders</h1>
+        <a href="{{ url_for('home') }}" class="button">Home</a>
+        <a href="{{ url_for('customers') }}" class="button">Customers</a>
+        <a href="{{ url_for('products') }}" class="button">Products</a>
+
+    </header>
+    <section class="main_section">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.customer.name }}</td>
+                        <td>{{ order.total_price }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('order_delete', order_id=order.id) }}">
+                                <button class="delete-button" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    
+    <footer>
+      
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

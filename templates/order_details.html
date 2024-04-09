@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header class="top_part">
+        <h1 style="align-self: flex-start">Order Details</h1>
+        <a href="{{ url_for('home') }}" class="button">Home</a>
+        <a href="{{ url_for('customers') }}" class="button">Customers</a>
+        <a href="{{ url_for('products') }}" class="button">Products</a>
+    </header>
+    <section class="main_section">
+        <h1>Order ID: {{ orders[0].id }}</h1>
+        <p>Customer: {{ customer.name }}</p>
+        <p>Total Price: {{ orders[0].total_price }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in orders[0].items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.price }}</td>
+                    <td>{{ item.total_price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if not orders[0].processed %}
+        <!-- Add an id attribute to the form for easier selection -->
+        <form id="processForm" action="{{ url_for('update_order', order_id=orders[0].id) }}" method="POST">
+            <input type="hidden" name="process" value="true">
+            <button type="button" id="processButton">Process</button>
+        </form>
+
+        {% endif %}
+    </section>
+    
+    <footer></footer>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const processButton = document.getElementById('processButton');
+        processButton.addEventListener('click', function() {
+            const formData = {
+                process: true
+            };
+    
+            fetch('{{ url_for("update_order", order_id=orders[0].id) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Order processed successfully, you may redirect or display a success message
+                    // For example:
+                    window.location.reload(); // Reload the page
+                } else {
+                    // Handle errors
+                    console.error('Error processing order:', response.statusText);
+                    // Display an error message to the user
+                }
+            })
+            .catch(error => {
+                console.error('Error processing order:', error);
+                // Handle network errors
+                // Display an error message to the user
+            });
+        });
+    });
+    </script>
+</body>
+</html>

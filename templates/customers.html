@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <title>{{title}}</title>
+</head>
+<body>
+    <header class="top_part">
+        <h1 style="align-self: flex-start">Customer List</h1>
+        <a href="{{ url_for('home') }}" class="button">Home</a>
+        <a href="{{ url_for('customers') }}" class="button">Customers</a>
+        <a href="{{ url_for('products') }}" class="button">Products</a>
+        
+    </header>
+    <section class="main_section">
+        <table>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.balance }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    
+    <footer>
+     
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
